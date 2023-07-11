@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import Card from './Card';
+import clsx from 'clsx';
 import { useContext, useState } from 'react';
 import Button from './Button';
 import { useRouter } from 'next/navigation';
@@ -9,6 +10,7 @@ import { EmailContext } from '../EmailProvider';
 
 const NewsLetterForm = () => {
   const router = useRouter();
+  const [disabled, setDisabled] = useState(!false)
   const { email, setEmail } = useContext(EmailContext);
 
   const features: string[] = [
@@ -101,9 +103,23 @@ const NewsLetterForm = () => {
           </ul>
 
           <form className="flex flex-col">
-            <label htmlFor="email" className="mb-2 font-bold">
-              Email Address
-            </label>
+            <div className="flex justify-between">
+              <label htmlFor="email" className="mb-2 font-bold">
+                Email Address
+              </label>
+
+              <span
+                className={clsx(
+                  'hidden',
+                  'text-[#FF6155]',
+                  'font-[0.75rem]',
+                  'font-bold',
+                  disabled && 'block'
+                )}
+              >
+                Valid email Required
+              </span>
+            </div>
             <input
               name="email"
               id="email"
@@ -111,22 +127,22 @@ const NewsLetterForm = () => {
               placeholder="email@company.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="
-                border-0
-                ring-1
-                px-6
-                py-4
-                rounded-lg
-                font-base
-                ring-[#19182B40]/25
-                hover:cursor-pointer
-                focus:border-0
-                focus:outline-0
-                focus:ring-1
-                focus:text-[#19182B40]/100
-                focus:ring-[#19182B40]/100
-
-              "
+              className={clsx(
+                'border-0',
+                'ring-1',
+                'px-6',
+                'py-4',
+                'rounded-lg',
+                'font-base',
+                'ring-[#19182B40]/25',
+                'hover:cursor-pointer',
+                'focus:border-0',
+                'focus:outline-0',
+                'focus:ring-1',
+                'focus:text-[#19182B40]/100',
+                'focus:ring-[#19182B40]/100',
+                'invalid:rin-[#FF6155]'
+              )}
             />
             <Button
               text="Subscribe to monthly newsletter"
