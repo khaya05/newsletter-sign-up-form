@@ -6,8 +6,7 @@ interface Props {
 
 const Card: React.FC<Props> = ({ children }) => {
   return (
-    <div
-      className="bg-white lg:rounded-[2.25rem] p-6">
+    <div className="h-full md:h-auto m-0 bg-white md:shadow-xl md:rounded-[2.25rem]">
       {children}
     </div>
   );

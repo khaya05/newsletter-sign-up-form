@@ -11,11 +11,13 @@ export default function Home() {
       <main
         className="
         h-full
-        w-full
-        bg-[#242742]
-        lg:flex
-        lg:justify-center
-        lg:items-center
+        w-[87.20%]
+        mx-auto
+        md:w-full
+        md:bg-[#242742]
+        md:flex
+        md:justify-center
+        md:items-center
       "
       >
         <NewsLetterForm />

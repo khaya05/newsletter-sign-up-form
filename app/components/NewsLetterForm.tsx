@@ -2,17 +2,25 @@
 
 import Image from 'next/image';
 import Card from './Card';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import Button from './Button';
+import { useRouter } from 'next/navigation';
+import { EmailContext } from '../EmailProvider';
 
 const NewsLetterForm = () => {
-  const [email, setEmail] = useState('');
-  console.log(email);
+  const router = useRouter();
+  const { email, setEmail } = useContext(EmailContext);
 
   const features: string[] = [
     'Product discovery and building what matters',
     'Measuring to ensure updates are a success',
     'And much more!',
   ];
+
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    router.push('/thank-you');
+  };
 
   return (
     <Card>
@@ -21,13 +29,19 @@ const NewsLetterForm = () => {
           flex
           flex-col
           items-center
+          gap-10
+          md:justify-between
           md:flex-row-reverse
+          md:pl-[4rem]
+          md:gap-[4rem]
+          md:m-6
+          lg:w-[58rem]
           "
       >
-        <div className="">
+        <div>
           {/* mobile image */}
           <Image
-            src="/public/images/illustration-sign-up-mobile.svg"
+            src="/images/illustration-sign-up-mobile.svg"
             width={23.4575 * 16}
             height={17.75 * 16}
             alt=""
@@ -38,24 +52,24 @@ const NewsLetterForm = () => {
 
           {/* desktop image */}
           <Image
-            src="/public/images/illustration-sign-up-desktop.svg"
+            src="/images/illustration-sign-up-desktop.svg"
             width={25 * 16}
             height={37.0625 * 16}
             alt=""
             className="
-            sm:hidden
+            hidden
             md:block
           "
           />
         </div>
 
-        <div className="pl-10">
+        <div>
           <h1
             className="
-              text-[3.5rem]
               font-bold
-
-
+              text-[2.5rem]
+              md:text-[3.5rem]
+              leading-[100%]
             "
           >
             Stay updated!
@@ -76,7 +90,7 @@ const NewsLetterForm = () => {
             {features.map((feature) => (
               <li key={feature} className="flex gap-3">
                 <Image
-                  src="/public/icons/icon-list.svg"
+                  src="/icons/icon-list.svg"
                   width={1.3125 * 16}
                   height={1.3125 * 16}
                   alt="icon"
@@ -86,8 +100,10 @@ const NewsLetterForm = () => {
             ))}
           </ul>
 
-          <form className='flex flex-col'>
-            <label htmlFor="email">Email Adress</label>
+          <form className="flex flex-col">
+            <label htmlFor="email" className="mb-2 font-bold">
+              Email Address
+            </label>
             <input
               name="email"
               id="email"
@@ -95,8 +111,30 @@ const NewsLetterForm = () => {
               placeholder="email@company.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              className="
+                border-0
+                ring-1
+                px-6
+                py-4
+                rounded-lg
+                font-base
+                ring-[#19182B40]/25
+                hover:cursor-pointer
+                focus:border-0
+                focus:outline-0
+                focus:ring-1
+                focus:text-[#19182B40]/100
+                focus:ring-[#19182B40]/100
+
+              "
             />
-            <button type="submit">Subscribe to monthly newsletter</button>
+            <Button
+              text="Subscribe to monthly newsletter"
+              onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
+                handleClick(e)
+              }
+              type="submit"
+            />
           </form>
         </div>
       </div>
