@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Card from './Card';
 import clsx from 'clsx';
-import { useContext, useMemo, useState } from 'react';
+import { useContext, useMemo } from 'react';
 import Button from './Button';
 import { useRouter } from 'next/navigation';
 import { EmailContext } from '../EmailProvider';
@@ -17,8 +17,7 @@ interface FormData {
 
 const NewsLetterForm = () => {
   const router = useRouter();
-  const [disabled, setDisabled] = useState(!false);
-  const { email, setEmail } = useContext(EmailContext);
+  const { setEmail } = useContext(EmailContext);
 
   const schema: ZodType<FormData> = z.object({
     email: z.string().email(),
@@ -41,7 +40,7 @@ const NewsLetterForm = () => {
     router.push('/thank-you');
   };
 
-  const isValid = useMemo(() => {
+  const isInValid = useMemo(() => {
     return errors?.email?.hasOwnProperty('message');
   }, [errors.email]);
 
@@ -129,7 +128,7 @@ const NewsLetterForm = () => {
                 Email Address
               </label>
 
-              {isValid && (
+              {isInValid && (
                 <span
                   className={clsx(
                     'text-[#FF6155]',
@@ -137,7 +136,7 @@ const NewsLetterForm = () => {
                     'font-bold'
                   )}
                 >
-                  Valid email Required
+                  Valid email required
                 </span>
               )}
             </div>
@@ -152,7 +151,7 @@ const NewsLetterForm = () => {
                 'px-6',
                 'py-4',
                 'rounded-lg',
-                'font-base',
+                'font-lg',
                 'ring-[#19182B40]/25',
                 'hover:cursor-pointer',
                 'focus:border-0',
@@ -160,7 +159,12 @@ const NewsLetterForm = () => {
                 'focus:ring-1',
                 'focus:text-[#19182B40]/100',
                 'focus:ring-[#19182B40]/100',
-                'invalid:rin-[#FF6155]'
+                isInValid && 'ring-[#FF6155]',
+                isInValid && 'bg-[#FF6155]/25',
+                isInValid && 'text-[#FF6155]',
+                isInValid && 'focus:ring-[#FF6155]',
+                isInValid && 'focus:bg-[#FF6155]/25',
+                isInValid && 'focus:text-[#FF6155]'
               )}
             />
             <Button text="Subscribe to monthly newsletter" type="submit" />
