@@ -151,7 +151,6 @@ const NewsLetterForm = () => {
                 'px-6',
                 'py-4',
                 'rounded-lg',
-                'font-lg',
                 'ring-[#19182B40]/25',
                 'hover:cursor-pointer',
                 'focus:border-0',
