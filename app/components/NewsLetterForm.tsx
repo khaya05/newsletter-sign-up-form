@@ -3,15 +3,26 @@
 import Image from 'next/image';
 import Card from './Card';
 import clsx from 'clsx';
-import { useContext, useState } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import Button from './Button';
 import { useRouter } from 'next/navigation';
 import { EmailContext } from '../EmailProvider';
+import { ZodType, z } from 'zod';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+interface FormData {
+  email: string;
+}
 
 const NewsLetterForm = () => {
   const router = useRouter();
-  const [disabled, setDisabled] = useState(!false)
+  const [disabled, setDisabled] = useState(!false);
   const { email, setEmail } = useContext(EmailContext);
+
+  const schema: ZodType<FormData> = z.object({
+    email: z.string().email(),
+  });
 
   const features: string[] = [
     'Product discovery and building what matters',
@@ -19,10 +30,20 @@ const NewsLetterForm = () => {
     'And much more!',
   ];
 
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({ resolver: zodResolver(schema) });
+
+  const submitData = (data: FormData) => {
+    setEmail(data.email);
     router.push('/thank-you');
   };
+
+  const isValid = useMemo(() => {
+    return errors?.email?.hasOwnProperty('message');
+  }, [errors.email]);
 
   return (
     <Card>
@@ -102,31 +123,29 @@ const NewsLetterForm = () => {
             ))}
           </ul>
 
-          <form className="flex flex-col">
+          <form onSubmit={handleSubmit(submitData)} className="flex flex-col">
             <div className="flex justify-between">
               <label htmlFor="email" className="mb-2 font-bold">
                 Email Address
               </label>
 
-              <span
-                className={clsx(
-                  'hidden',
-                  'text-[#FF6155]',
-                  'font-[0.75rem]',
-                  'font-bold',
-                  disabled && 'block'
-                )}
-              >
-                Valid email Required
-              </span>
+              {isValid && (
+                <span
+                  className={clsx(
+                    'text-[#FF6155]',
+                    'font-[0.75rem]',
+                    'font-bold'
+                  )}
+                >
+                  Valid email Required
+                </span>
+              )}
             </div>
             <input
-              name="email"
               id="email"
               type="email"
               placeholder="email@company.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              {...register('email')}
               className={clsx(
                 'border-0',
                 'ring-1',
@@ -144,13 +163,7 @@ const NewsLetterForm = () => {
                 'invalid:rin-[#FF6155]'
               )}
             />
-            <Button
-              text="Subscribe to monthly newsletter"
-              onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
-                handleClick(e)
-              }
-              type="submit"
-            />
+            <Button text="Subscribe to monthly newsletter" type="submit" />
           </form>
         </div>
       </div>

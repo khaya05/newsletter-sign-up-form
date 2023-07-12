@@ -6,7 +6,7 @@ import { ButtonHTMLAttributes } from 'react';
 interface Props {
   text: string;
   type: 'button' | 'reset' | 'submit';
-  onClick: any;
+  onClick?: any;
 }
 
 const Button: React.FC<Props> = ({ text, onClick, type }) => {
